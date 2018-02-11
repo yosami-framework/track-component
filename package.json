@@ -1,0 +1,23 @@
+{
+  "name": "track-component",
+  "version": "0.0.1",
+  "description": "Component for track.",
+  "main": "lib/index.js",
+  "repository": "alfa-jpn/track-component.git",
+  "scripts": {
+    "linter": "eslint ./",
+    "test": "ospec"
+  },
+  "author": "alfa-jpn",
+  "license": "ISC",
+  "dependencies": {
+    "track-dsl": "0.0.1",
+    "track-i18n": "0.0.2",
+    "track-view-model": "0.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-google": "^0.9.1",
+    "track-spec": "0.0.2"
+  }
+}

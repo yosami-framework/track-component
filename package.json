@@ -11,9 +11,10 @@
   "author": "alfa-jpn",
   "license": "ISC",
   "dependencies": {
-    "track-dsl": "0.0.1",
+    "track-dsl": "0.0.3",
     "track-i18n": "0.0.2",
-    "track-view-model": "0.0.1"
+    "track-view": "0.0.2",
+    "track-view-model": "0.0.2"
   },
   "devDependencies": {
     "eslint": "^4.17.0",

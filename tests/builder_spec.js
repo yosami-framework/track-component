@@ -67,7 +67,7 @@ t.describe('Builder', () => {
 
   t.describe('#viewmodel', () => {
     t.it('Set #_vm', () => {
-      t.expect(mock._vm instanceof mockViewModelClass).equals(true);
+      t.expect(mock._vmclass).equals(mockViewModelClass);
     });
   });
 });

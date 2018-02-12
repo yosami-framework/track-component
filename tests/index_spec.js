@@ -1,14 +1,16 @@
-const t               = require('track-spec');
-const TrackView       = require('track-view');
-const TrackComponent  = require('../lib/index.js');
+const t              = require('track-spec');
+const TrackView      = require('track-view');
+const TrackViewModel = require('track-view-model');
+const TrackComponent = require('../lib/index.js');
 
 t.describe('TrackComponent', () => {
-  let mockComponent = null;
-  let mockVnode     = null;
-  let mockViewClass = null;
+  let mockComponent      = null;
+  let mockVnode          = null;
+  let mockViewClass      = null;
+  let mockViewModelClass = null;
 
   t.beforeEach(() => {
-    mockVnode = {};
+    mockVnode = {state: {}};
     mockViewClass = (class extends TrackView {
       /**
        * Render view.
@@ -20,6 +22,15 @@ t.describe('TrackComponent', () => {
       }
     });
 
+    mockViewModelClass = (class extends TrackViewModel {
+      /**
+       * Definitions of viewmodel.
+       */
+      static definer() {
+        name('mock_viewmodel');
+      }
+    });
+
     mockComponent = new (class extends TrackComponent {
       /**
        * Definitions of model.
@@ -27,6 +38,7 @@ t.describe('TrackComponent', () => {
       static definer() {
         name('mock_component');
         views(this.mockViewClass);
+        viewmodel(this.mockViewModelClass);
       }
 
       /**
@@ -35,16 +47,14 @@ t.describe('TrackComponent', () => {
       get mockViewClass() {
         return mockViewClass;
       }
+
+      /**
+       * Return mock class.
+       */
+      get mockViewModelClass() {
+        return mockViewModelClass;
+      }
     })(mockVnode);
-  });
-
-  t.describe('#vnode', () => {
-    const subject = (() => mockComponent.vnode);
-
-    t.it('Return vnode', () => {
-      subject();
-      t.expect(subject()).equals(mockVnode);
-    });
   });
 
   t.describe('#name', () => {
@@ -53,6 +63,22 @@ t.describe('TrackComponent', () => {
     t.it('Return name', () => {
       subject();
       t.expect(subject()).equals('mock_component');
+    });
+  });
+
+  t.describe('#viewmodel', () => {
+    const subject = (() => mockComponent.viewmodel);
+
+    t.it('Return ViewModel', () => {
+      t.expect(subject() instanceof mockViewModelClass).equals(true);
+    });
+  });
+
+  t.describe('#vnode', () => {
+    const subject = (() => mockComponent.vnode);
+
+    t.it('Return vnode', () => {
+      t.expect(subject()).equals(mockVnode);
     });
   });
 

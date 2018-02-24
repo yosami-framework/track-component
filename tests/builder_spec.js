@@ -9,6 +9,10 @@ t.describe('Builder', () => {
   let mockViewModelClass = null;
 
   t.beforeEach(() => {
+    process.browser = true;
+
+    global.addEventListener = t.spy(global.addEventListener);
+
     mockViewClass = (class extends TrackView {
       // mock
     });
@@ -31,6 +35,7 @@ t.describe('Builder', () => {
         views(this.mockViewClass);
         views(this.mockViewClass);
         viewmodel(this.mockViewModelClass);
+        event('scroll', 'onScroll');
       }
 
       /**
@@ -48,7 +53,13 @@ t.describe('Builder', () => {
       }
     })();
 
+    mock._assignGlobalEvent = t.spy();
+
     Builder.build(mock);
+  });
+
+  t.afterEach(() => {
+    process.browser = false;
   });
 
   t.describe('#name', () => {
@@ -68,6 +79,14 @@ t.describe('Builder', () => {
   t.describe('#viewmodel', () => {
     t.it('Set #_vm', () => {
       t.expect(mock._vmclass).equals(mockViewModelClass);
+    });
+  });
+
+  t.describe('#event', () => {
+    t.it('Call ._assignGlobalEvent', () => {
+      t.expect(mock._assignGlobalEvent.callCount).equals(1);
+      t.expect(mock._assignGlobalEvent.args[0]).equals('scroll');
+      t.expect(mock._assignGlobalEvent.args[1]).equals('onScroll');
     });
   });
 });

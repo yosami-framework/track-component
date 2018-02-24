@@ -20,10 +20,16 @@ class HogeComponent extends TrackComponent {
     name('hoge');                            // Define model name. **Required**
     views(require('./views/hoge'));          // Append view.
     viewmodel(require('./viewmodels/hoge')); // Set viewmodel. (TrackModel)
+
+    event('scroll', 'onScroll');             // Add event listener for global(window).
   }
 
   oninit() {
     super.oninit(); // Must call when Override lifecycle methods of Mithril.
+  }
+
+  onScroll(e) {
+    console.log(e);
   }
 }
 ```

@@ -10,6 +10,10 @@ t.describe('TrackComponent', () => {
   let mockViewModelClass = null;
 
   t.beforeEach(() => {
+    process.browser = true;
+    global.addEventListener = t.spy(global.addEventListener);
+    global.removeEventListener = t.spy(global.removeEventListener);
+
     mockVnode = {state: {}};
     mockViewClass = (class extends TrackView {
       /**
@@ -39,6 +43,7 @@ t.describe('TrackComponent', () => {
         name('mock_component');
         views(this.mockViewClass);
         viewmodel(this.mockViewModelClass);
+        event('scroll', 'onScroll');
       }
 
       /**
@@ -54,7 +59,18 @@ t.describe('TrackComponent', () => {
       get mockViewModelClass() {
         return mockViewModelClass;
       }
+
+      /**
+       * Scroll event handler.
+       */
+      onScroll() {
+        //
+      }
     })(mockVnode);
+  });
+
+  t.afterEach(() => {
+    process.browser = false;
   });
 
   t.describe('#name', () => {
@@ -110,8 +126,17 @@ t.describe('TrackComponent', () => {
   });
 
   t.describe('#onbeforeremove', () => {
+    t.beforeEach(() => {
+      mockComponent._unassignGlobalEvents = t.spy();
+    });
+
     t.it('Defined', () => {
       t.expect(mockComponent.onbeforeremove instanceof Function).equals(true);
+    });
+
+    t.it('Call #_unassignGlobalEvents', () => {
+      mockComponent.onbeforeremove();
+      t.expect(mockComponent._unassignGlobalEvents.callCount).equals(1);
     });
   });
 
@@ -134,6 +159,34 @@ t.describe('TrackComponent', () => {
 
     t.it('Render view', () => {
       t.expect(subject()).deepEquals([null]);
+    });
+  });
+
+  t.describe('#_assignGlobalEvent', () => {
+    const subject = (() => mockComponent._assignGlobalEvent('hoge', 'onHoge'));
+
+    t.beforeEach(() => {
+      mockComponent.onHoge = t.spy();
+      global.addEventListener = t.spy(global.addEventListener);
+    });
+
+    t.it('Call global.addEventListener', () => {
+      subject();
+      t.expect(global.addEventListener.callCount).equals(1);
+      t.expect(global.addEventListener.args[0]).equals('hoge');
+
+      global.addEventListener.args[1]();
+      t.expect(mockComponent.onHoge.callCount).equals(1);
+    });
+  });
+
+  t.describe('#_unassignGlobalEvents', () => {
+    const subject = (() => mockComponent._unassignGlobalEvents());
+
+    t.it('Call global.removeEventListener', () => {
+      subject();
+      t.expect(global.removeEventListener.callCount).equals(1);
+      t.expect(global.removeEventListener.args[0]).equals('scroll');
     });
   });
 });

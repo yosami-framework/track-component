@@ -1,7 +1,7 @@
-const t              = require('track-spec');
-const TrackView      = require('track-view');
-const TrackViewModel = require('track-view-model');
-const Builder        = require('../lib/builder.js');
+const t          = require('track-spec');
+const TrackModel = require('track-model');
+const TrackView  = require('track-view');
+const Builder    = require('../lib/builder.js');
 
 t.describe('Builder', () => {
   let mock               = null;
@@ -13,7 +13,7 @@ t.describe('Builder', () => {
       // mock
     });
 
-    mockViewModelClass = (class extends TrackViewModel {
+    mockViewModelClass = (class extends TrackModel {
       /**
        * Definitions of viewmodel.
        */

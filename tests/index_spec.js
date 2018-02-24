@@ -1,6 +1,6 @@
 const t              = require('track-spec');
+const TrackModel     = require('track-model');
 const TrackView      = require('track-view');
-const TrackViewModel = require('track-view-model');
 const TrackComponent = require('../lib/index.js');
 
 t.describe('TrackComponent', () => {
@@ -22,7 +22,7 @@ t.describe('TrackComponent', () => {
       }
     });
 
-    mockViewModelClass = (class extends TrackViewModel {
+    mockViewModelClass = (class extends TrackModel {
       /**
        * Definitions of viewmodel.
        */

@@ -19,7 +19,7 @@ class HogeComponent extends TrackComponent {
   static definer() {
     name('hoge');                            // Define model name. **Required**
     views(require('./views/hoge'));          // Append view.
-    viewmodel(require('./viewmodels/hoge')); // Set viewmodel.
+    viewmodel(require('./viewmodels/hoge')); // Set viewmodel. (TrackModel)
   }
 
   oninit() {

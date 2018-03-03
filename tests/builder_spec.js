@@ -1,7 +1,8 @@
-const t          = require('track-spec');
-const TrackModel = require('track-model');
-const TrackView  = require('track-view');
-const Builder    = require('../lib/builder.js');
+require('./spec_helper');
+const t             = require('track-spec');
+const MockView      = require('./fixtures/views/mock');
+const MockViewModel = require('./fixtures/view_models/mock');
+const Builder       = require('../lib/builder.js');
 
 t.describe('Builder', () => {
   let mock               = null;
@@ -13,28 +14,15 @@ t.describe('Builder', () => {
 
     global.addEventListener = t.spy(global.addEventListener);
 
-    mockViewClass = (class extends TrackView {
-      // mock
-    });
-
-    mockViewModelClass = (class extends TrackModel {
-      /**
-       * Definitions of viewmodel.
-       */
-      static definer() {
-        name('mock_viewmodel');
-      }
-    });
-
     mock = new (class HogeHoge {
       /**
        * Definitions of component.
        */
       static definer() {
         name('mock_component');
-        views(this.mockViewClass);
-        views(this.mockViewClass);
-        viewmodel(this.mockViewModelClass);
+        viewmodel('mock');
+        views('mock');
+        views('mock');
         event('scroll', 'onScroll');
       }
 
@@ -71,14 +59,14 @@ t.describe('Builder', () => {
   t.describe('#views', () => {
     t.it('Append #_views', () => {
       t.expect(mock._views.length).equals(2);
-      t.expect(mock._views[0] instanceof mockViewClass).equals(true);
+      t.expect(mock._views[0] instanceof MockView).equals(true);
       t.expect(mock._views[0]._component).equals(mock);
     });
   });
 
   t.describe('#viewmodel', () => {
     t.it('Set #_vm', () => {
-      t.expect(mock._vmclass).equals(mockViewModelClass);
+      t.expect(mock._vmclass).equals(MockViewModel);
     });
   });
 

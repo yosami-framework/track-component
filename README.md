@@ -17,9 +17,9 @@ const TrackComponent = require('track-component');
 
 class HogeComponent extends TrackComponent {
   static definer() {
-    name('hoge');                            // Define model name. **Required**
-    views(require('./views/hoge'));          // Append view.
-    viewmodel(require('./viewmodels/hoge')); // Set viewmodel. (TrackModel)
+    name('hoge');       // Define model name. **Required**
+    views('hoge');     // Append view (`views/hoge`)
+    viewmodel('hoge')); // Set viewmodel. (`view_models\hoge`)
 
     event('scroll', 'onScroll');             // Add event listener for global(window).
   }
@@ -43,14 +43,14 @@ const TrackComponent = require('track-component');
 
 class HogeComponent extends TrackComponent {
   static definer() {
-    name('hoge');                         // Define model name. **Required**
-    views(require('./views/outer_hoge')); // Append view.
-    views(require('./views/inner_hoge')); // Append view.
+    name('hoge');        // Define model name. **Required**
+    views('outer_hoge'); // Append view.
+    views('inner_hoge'); // Append view.
   }
 }
 ```
 
-outer_hoge.js
+`views/outer_hoge.js`
 
 ```javascript
 class OuterHoge extends TrackView {
@@ -63,7 +63,7 @@ class OuterHoge extends TrackView {
 }
 ```
 
-inner_hoge.js
+`views/inner_hoge.js`
 
 ```javascript
 class InnerHoge extends TrackView {

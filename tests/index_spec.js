@@ -1,6 +1,6 @@
+require('./spec_helper');
 const t              = require('track-spec');
-const TrackModel     = require('track-model');
-const TrackView      = require('track-view');
+const MockViewModel  = require('./fixtures/view_models/mock');
 const TrackComponent = require('../lib/index.js');
 
 t.describe('TrackComponent', () => {
@@ -15,34 +15,14 @@ t.describe('TrackComponent', () => {
     global.removeEventListener = t.spy(global.removeEventListener);
 
     mockVnode = {state: {}};
-    mockViewClass = (class extends TrackView {
-      /**
-       * Render view.
-       * @param {object} _yield object.
-       * @return {array} mock
-       */
-      render(_yield) {
-        return [_yield];
-      }
-    });
-
-    mockViewModelClass = (class extends TrackModel {
-      /**
-       * Definitions of viewmodel.
-       */
-      static definer() {
-        name('mock_viewmodel');
-      }
-    });
-
     mockComponent = new (class extends TrackComponent {
       /**
        * Definitions of model.
        */
       static definer() {
         name('mock_component');
-        views(this.mockViewClass);
-        viewmodel(this.mockViewModelClass);
+        views('mock');
+        viewmodel('mock');
         event('scroll', 'onScroll');
       }
 
@@ -86,7 +66,7 @@ t.describe('TrackComponent', () => {
     const subject = (() => mockComponent.viewmodel);
 
     t.it('Return ViewModel', () => {
-      t.expect(subject() instanceof mockViewModelClass).equals(true);
+      t.expect(subject() instanceof MockViewModel).equals(true);
     });
   });
 
@@ -158,7 +138,7 @@ t.describe('TrackComponent', () => {
     const subject = (() => mockComponent.view());
 
     t.it('Render view', () => {
-      t.expect(subject()).deepEquals([null]);
+      t.expect(subject()).deepEquals('mock');
     });
   });
 

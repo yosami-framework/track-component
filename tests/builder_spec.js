@@ -1,8 +1,6 @@
 require('./spec_helper');
-const t             = require('track-spec');
-const MockView      = require('./fixtures/views/mock');
-const MockViewModel = require('./fixtures/view_models/mock');
-const Builder       = require('../lib/builder.js');
+const t       = require('track-spec');
+const Builder = require('../lib/builder.js');
 
 t.describe('Builder', () => {
   let mock               = null;
@@ -19,11 +17,17 @@ t.describe('Builder', () => {
        * Definitions of component.
        */
       static definer() {
-        name('mock_component');
-        viewmodel('mock');
-        views('mock');
-        views('mock');
+        name('mock');
+        views('mock_a');
+        views('mock_b');
         event('scroll', 'onScroll');
+      }
+
+      /**
+       * Return type.
+       */
+      get type() {
+        return 'component';
       }
 
       /**
@@ -52,21 +56,15 @@ t.describe('Builder', () => {
 
   t.describe('#name', () => {
     t.it('Set #_name', () => {
-      t.expect(mock._name).equals('mock_component');
+      t.expect(mock._name).equals('mock');
     });
   });
 
   t.describe('#views', () => {
-    t.it('Append #_views', () => {
-      t.expect(mock._views.length).equals(2);
-      t.expect(mock._views[0] instanceof MockView).equals(true);
-      t.expect(mock._views[0]._component).equals(mock);
-    });
-  });
-
-  t.describe('#viewmodel', () => {
-    t.it('Set #_vm', () => {
-      t.expect(mock._vmclass).equals(MockViewModel);
+    t.it('Append #_viewNames', () => {
+      t.expect(mock._viewNames.length).equals(2);
+      t.expect(mock._viewNames[0]).equals('mock_a');
+      t.expect(mock._viewNames[1]).equals('mock_b');
     });
   });
 

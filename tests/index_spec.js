@@ -1,6 +1,7 @@
 require('./spec_helper');
 const t              = require('track-spec');
-const MockViewModel  = require('./fixtures/view_models/mock');
+const MockViewModel  = require('./fixtures/view_models/components/mock');
+const MockView       = require('./fixtures/views/components/mock');
 const TrackComponent = require('../lib/index.js');
 
 t.describe('TrackComponent', () => {
@@ -20,9 +21,8 @@ t.describe('TrackComponent', () => {
        * Definitions of model.
        */
       static definer() {
-        name('mock_component');
+        name('mock');
         views('mock');
-        viewmodel('mock');
         event('scroll', 'onScroll');
       }
 
@@ -53,12 +53,21 @@ t.describe('TrackComponent', () => {
     process.browser = false;
   });
 
+  t.describe('#type', () => {
+    const subject = (() => mockComponent.type);
+
+    t.it('Return type', () => {
+      subject();
+      t.expect(subject()).equals('component');
+    });
+  });
+
   t.describe('#name', () => {
     const subject = (() => mockComponent.name);
 
     t.it('Return name', () => {
       subject();
-      t.expect(subject()).equals('mock_component');
+      t.expect(subject()).equals('mock');
     });
   });
 
@@ -67,6 +76,15 @@ t.describe('TrackComponent', () => {
 
     t.it('Return ViewModel', () => {
       t.expect(subject() instanceof MockViewModel).equals(true);
+    });
+  });
+
+  t.describe('#views', () => {
+    const subject = (() => mockComponent.views);
+
+    t.it('Return Views', () => {
+      t.expect(subject().length).equals(1);
+      t.expect(subject()[0] instanceof MockView).equals(true);
     });
   });
 
@@ -108,10 +126,6 @@ t.describe('TrackComponent', () => {
   t.describe('#onbeforeremove', () => {
     t.beforeEach(() => {
       mockComponent._unassignGlobalEvents = t.spy();
-    });
-
-    t.it('Defined', () => {
-      t.expect(mockComponent.onbeforeremove instanceof Function).equals(true);
     });
 
     t.it('Call #_unassignGlobalEvents', () => {

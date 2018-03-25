@@ -12,6 +12,10 @@ npm install track-component
 
 ## Usage
 
+#### Write Component
+
+`app/components/hoge.js`
+
 ```javascript
 const TrackComponent = require('track-component');
 
@@ -32,13 +36,23 @@ class HogeComponent extends TrackComponent {
 }
 ```
 
+#### Write view
+
+`app/views/hoge.js`
+
+```javascript
+function(component, attrs) {
+  return m('div', [
+    m('h1', 'Hello!'),
+  ]);
+}
+```
+
 ### Use multiple views.
 
 hoge_component.js
 
 ```javascript
-const TrackComponent = require('track-component');
-
 class HogeComponent extends TrackComponent {
   static definer() {
     name('hoge');        // Define model name. **Required**
@@ -48,25 +62,67 @@ class HogeComponent extends TrackComponent {
 }
 ```
 
-`views/outer_hoge.js`
+`app/views/outer_hoge.js`
 
 ```javascript
-class OuterHoge extends TrackView {
-  render(_yield) {
-    m('div', [
-      m('h1', 'Hello!'),
-      _yield,
-    ]);
-  }
+function(component, attrs, _yield) {
+  return m('div', [
+    m('h1', 'Hello!'),
+    _yield,
+  ]);
 }
 ```
 
 `views/inner_hoge.js`
 
 ```javascript
-class InnerHoge extends TrackView {
-  render() {
-    m('p', 'Hoge!');
+function(component, attrs) {
+  return m('p', 'Hoge!');
+}
+```
+
+### Use ViewModel
+
+#### Write ViewModel
+`view_models/hoge.js`
+
+```javascript
+const TrackModel = require('track-view-model');
+
+class Hoge extends TrackModel {
+  static definer() {
+    name('hoge'); // Define model name. **Required**
+    accessor('piyo'); // Define `hoge.piyo` and `hoge.piyo=`
   }
+}
+```
+
+#### Set value in component.
+
+`app/components/hoge.js`
+```javascript
+class HogeComponent extends TrackComponent {
+  static definer() {
+    name('hoge');
+    views('hoge');
+  }
+
+  oninit() {
+    this.vm.piyo = 'PIYO!!!!!PIYO!!!!!';
+    return super.oninit();
+  }
+}
+```
+
+#### Get value in view
+
+`app/views/hoge.js`
+
+```javascript
+// @note Binding instance of view model.
+function(component, attrs, _yield) {
+  return m('div', [
+    m('h1', this.piyo),
+  ]);
 }
 ```

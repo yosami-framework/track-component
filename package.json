@@ -1,6 +1,6 @@
 {
   "name": "track-component",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Component for track.",
   "main": "lib/index.js",
   "repository": "alfa-jpn/track-component.git",
@@ -18,14 +18,12 @@
     "track-dsl": "0.0.3",
     "track-i18n": "0.0.2",
     "track-model": "0.0.5",
-    "track-spec": "0.0.3",
-    "track-view": "0.0.4"
+    "track-spec": "0.0.3"
   },
   "peerDependencies": {
     "track-config": "0.0.x",
     "track-dsl": "0.0.x",
     "track-i18n": "0.0.x",
-    "track-model": "0.0.x",
-    "track-view": "0.0.x"
+    "track-model": "0.0.x"
   }
 }

@@ -1,14 +1,11 @@
 require('./spec_helper');
 const t              = require('track-spec');
 const MockViewModel  = require('./fixtures/view_models/components/mock');
-const MockView       = require('./fixtures/views/components/mock');
 const TrackComponent = require('../lib/index.js');
 
 t.describe('TrackComponent', () => {
-  let mockComponent      = null;
-  let mockVnode          = null;
-  let mockViewClass      = null;
-  let mockViewModelClass = null;
+  let mockComponent = null;
+  let mockVnode     = null;
 
   t.beforeEach(() => {
     process.browser = true;
@@ -24,20 +21,6 @@ t.describe('TrackComponent', () => {
         name('mock');
         views('mock');
         event('scroll', 'onScroll');
-      }
-
-      /**
-       * Return mockViewlClass
-       */
-      get mockViewClass() {
-        return mockViewClass;
-      }
-
-      /**
-       * Return mock class.
-       */
-      get mockViewModelClass() {
-        return mockViewModelClass;
       }
 
       /**
@@ -71,8 +54,8 @@ t.describe('TrackComponent', () => {
     });
   });
 
-  t.describe('#viewmodel', () => {
-    const subject = (() => mockComponent.viewmodel);
+  t.describe('#vm', () => {
+    const subject = (() => mockComponent.vm);
 
     t.it('Return ViewModel', () => {
       t.expect(subject() instanceof MockViewModel).equals(true);
@@ -84,7 +67,25 @@ t.describe('TrackComponent', () => {
 
     t.it('Return Views', () => {
       t.expect(subject().length).equals(1);
-      t.expect(subject()[0] instanceof MockView).equals(true);
+      t.expect(subject()[0] instanceof Function).equals(true);
+    });
+
+    t.context('When viewmodel is not defined', () => {
+      t.beforeEach(() => {
+        mockComponent = new (class extends TrackComponent {
+          /**
+           * Definitions of model.
+           */
+          static definer() {
+            name('mock_without_vm');
+            views('mock');
+          }
+        })(mockVnode);
+      });
+
+      t.it('Return Views', () => {
+        t.expect(subject().length).equals(1);
+      });
     });
   });
 

@@ -21,17 +21,7 @@ const TrackComponent = require('track-component');
 
 class HogeComponent extends TrackComponent {
   static definer() {
-    name('hoge');                // Define model name. **Required**
-    views('hoge');               // Append view (`views/hoge`)
-    event('scroll', 'onScroll'); // Add event listener for global(window).
-  }
-
-  oninit() {
-    super.oninit(); // Must call when Override lifecycle methods of Mithril.
-  }
-
-  onScroll(e) {
-    console.log(e);
+    name('hoge'); // Define model name. **Required**
   }
 }
 ```
@@ -124,5 +114,38 @@ function(component, attrs, _yield) {
   return m('div', [
     m('h1', this.piyo),
   ]);
+}
+```
+
+### Assign global(window) event
+
+```javascript
+const TrackComponent = require('track-component');
+
+class HogeComponent extends TrackComponent {
+  static definer() {
+    name('hoge');                // Define model name. **Required**
+    event('scroll', 'onScroll'); // Add event listener for global(window).
+  }
+
+  onScroll(e) {
+    console.log(e);
+  }
+}
+```
+
+### Mithril lifecycle method
+
+```javascript
+const TrackComponent = require('track-component');
+
+class HogeComponent extends TrackComponent {
+  static definer() {
+    name('hoge'); // Define model name. **Required**
+  }
+
+  oninit() {
+    super.oninit(); // Must call when Override lifecycle methods of Mithril.
+  }
 }
 ```

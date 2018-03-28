@@ -19,7 +19,6 @@ t.describe('TrackComponent', () => {
        */
       static definer() {
         name('mock');
-        views('mock');
         event('scroll', 'onScroll');
       }
 
@@ -68,6 +67,43 @@ t.describe('TrackComponent', () => {
     t.it('Return Views', () => {
       t.expect(subject().length).equals(1);
       t.expect(subject()[0] instanceof Function).equals(true);
+    });
+
+    t.context('When definer includes `views`', () => {
+      t.beforeEach(() => {
+        mockComponent = new (class extends TrackComponent {
+          /**
+           * Definitions of model.
+           */
+          static definer() {
+            name('mock');
+            views('mock_mock');
+          }
+        })(mockVnode);
+      });
+
+      t.it('Return Views', () => {
+        t.expect(subject().length).equals(1);
+      });
+    });
+
+    t.context('When definer includes two `views`', () => {
+      t.beforeEach(() => {
+        mockComponent = new (class extends TrackComponent {
+          /**
+           * Definitions of model.
+           */
+          static definer() {
+            name('mock');
+            views('mock');
+            views('mock_mock');
+          }
+        })(mockVnode);
+      });
+
+      t.it('Return Views', () => {
+        t.expect(subject().length).equals(2);
+      });
     });
 
     t.context('When viewmodel is not defined', () => {

@@ -12,7 +12,7 @@ t.describe('TrackComponent', () => {
     global.addEventListener = t.spy(global.addEventListener);
     global.removeEventListener = t.spy(global.removeEventListener);
 
-    mockVnode = {state: {}};
+    mockVnode = {state: {}, attrs: {}};
     mockComponent = new (class extends TrackComponent {
       /**
        * Definitions of model.
@@ -33,6 +33,14 @@ t.describe('TrackComponent', () => {
 
   t.afterEach(() => {
     process.browser = false;
+  });
+
+  t.describe('#attrs', () => {
+    const subject = (() => mockComponent.attrs);
+
+    t.it('Return attrs', () => {
+      t.expect(subject()).equals(mockVnode.attrs);
+    });
   });
 
   t.describe('#type', () => {
@@ -162,12 +170,12 @@ t.describe('TrackComponent', () => {
 
   t.describe('#onbeforeremove', () => {
     t.beforeEach(() => {
-      mockComponent._unassignGlobalEvents = t.spy();
+      mockComponent._unbindGlobalEvents = t.spy();
     });
 
-    t.it('Call #_unassignGlobalEvents', () => {
+    t.it('Call #_unbindGlobalEvents', () => {
       mockComponent.onbeforeremove();
-      t.expect(mockComponent._unassignGlobalEvents.callCount).equals(1);
+      t.expect(mockComponent._unbindGlobalEvents.callCount).equals(1);
     });
   });
 
@@ -188,13 +196,31 @@ t.describe('TrackComponent', () => {
   t.describe('#view', () => {
     const subject = (() => mockComponent.view());
 
+    t.beforeEach(() => {
+      mockComponent = new (class extends TrackComponent {
+        /**
+         * Definitions of model.
+         */
+        static definer() {
+          name('mock');
+          views('mock');
+          views('mock_mock');
+        }
+      })(mockVnode);
+    });
+
     t.it('Render view', () => {
       t.expect(subject()).deepEquals('mock');
     });
+
+    t.it('Pipe data', () => {
+      subject();
+      t.expect(mockComponent.pipedData).equals('WATER!!!');
+    });
   });
 
-  t.describe('#_assignGlobalEvent', () => {
-    const subject = (() => mockComponent._assignGlobalEvent('hoge', 'onHoge'));
+  t.describe('#_bindGlobalEvent', () => {
+    const subject = (() => mockComponent._bindGlobalEvent('hoge', 'onHoge'));
 
     t.beforeEach(() => {
       mockComponent.onHoge = t.spy();
@@ -211,8 +237,8 @@ t.describe('TrackComponent', () => {
     });
   });
 
-  t.describe('#_unassignGlobalEvents', () => {
-    const subject = (() => mockComponent._unassignGlobalEvents());
+  t.describe('#_unbindGlobalEvents', () => {
+    const subject = (() => mockComponent._unbindGlobalEvents());
 
     t.it('Call global.removeEventListener', () => {
       subject();

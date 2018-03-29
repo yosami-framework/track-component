@@ -31,7 +31,7 @@ class HogeComponent extends TrackComponent {
 `app/views/hoge.js`
 
 ```javascript
-function(component, attrs) {
+function(component) {
   return m('div', [
     m('h1', 'Hello!'),
   ]);
@@ -55,9 +55,9 @@ class HogeComponent extends TrackComponent {
 `app/views/outer_hoge.js`
 
 ```javascript
-function(component, attrs, _yield) {
+function(component, pipe, _yield) {
   return m('div', [
-    m('h1', 'Hello!'),
+    m('h1', `Hello ${pipe.name}!`),
     _yield,
   ]);
 }
@@ -66,8 +66,9 @@ function(component, attrs, _yield) {
 `views/inner_hoge.js`
 
 ```javascript
-function(component, attrs) {
-  return m('p', 'Hoge!');
+function(component, pipe) {
+  pipe.name = 'hoge'
+  return m('p', 'yes!');
 }
 ```
 
@@ -110,7 +111,7 @@ class HogeComponent extends TrackComponent {
 
 ```javascript
 // @note Binding instance of view model.
-function(component, attrs, _yield) {
+function(component) {
   return m('div', [
     m('h1', this.piyo),
   ]);

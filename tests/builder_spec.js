@@ -24,6 +24,13 @@ t.describe('Builder', () => {
       }
 
       /**
+       * Constructor
+       */
+      constructor() {
+        this._viewNames = [];
+      }
+
+      /**
        * Return type.
        */
       get type() {
@@ -45,7 +52,7 @@ t.describe('Builder', () => {
       }
     })();
 
-    mock._assignGlobalEvent = t.spy();
+    mock._bindGlobalEvent = t.spy();
 
     Builder.build(mock);
   });
@@ -69,10 +76,10 @@ t.describe('Builder', () => {
   });
 
   t.describe('#event', () => {
-    t.it('Call ._assignGlobalEvent', () => {
-      t.expect(mock._assignGlobalEvent.callCount).equals(1);
-      t.expect(mock._assignGlobalEvent.args[0]).equals('scroll');
-      t.expect(mock._assignGlobalEvent.args[1]).equals('onScroll');
+    t.it('Call ._bindGlobalEvent', () => {
+      t.expect(mock._bindGlobalEvent.callCount).equals(1);
+      t.expect(mock._bindGlobalEvent.args[0]).equals('scroll');
+      t.expect(mock._bindGlobalEvent.args[1]).equals('onScroll');
     });
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "track-component",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Component for track.",
   "main": "lib/index.js",
   "repository": "alfa-jpn/track-component.git",

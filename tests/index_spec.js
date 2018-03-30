@@ -142,8 +142,15 @@ t.describe('TrackComponent', () => {
   });
 
   t.describe('#oninit', () => {
-    t.it('Defined', () => {
-      t.expect(mockComponent.oninit instanceof Function).equals(true);
+    const subject = (() => mockComponent.oninit());
+
+    t.beforeEach(() => {
+      mockComponent._watchAttrs = t.spy();
+    });
+
+    t.it('Call #_watchAttrs', () => {
+      subject();
+      t.expect(mockComponent._watchAttrs.callCount).equals(1);
     });
   });
 
@@ -159,12 +166,18 @@ t.describe('TrackComponent', () => {
 
     t.beforeEach(() => {
       newVnode = {};
+      mockComponent._watchAttrs = t.spy();
     });
 
     t.it('Update vnode', () => {
       t.expect(mockComponent.vnode).equals(mockVnode);
       subject();
       t.expect(mockComponent.vnode).equals(newVnode);
+    });
+
+    t.it('Call #_watchAttrs', () => {
+      subject();
+      t.expect(mockComponent._watchAttrs.callCount).equals(1);
     });
   });
 
@@ -244,6 +257,54 @@ t.describe('TrackComponent', () => {
       subject();
       t.expect(global.removeEventListener.callCount).equals(1);
       t.expect(global.removeEventListener.args[0]).equals('scroll');
+    });
+  });
+
+  t.describe('#_watchAttrs', () => {
+    const subject = (() => mockComponent._watchAttrs());
+
+    t.beforeEach(() => {
+      mockComponent.onattrschanged = t.spy();
+    });
+
+    t.context('When change params', () => {
+      t.beforeEach(() => {
+        mockComponent.vnode.attrs = {a: '1'};
+        mockComponent.vnode.state.component.attrs = {a: '0'};
+      });
+
+      t.it('Call onattrschanged', () => {
+        subject();
+        t.expect(mockComponent.onattrschanged.callCount).equals(1);
+      });
+
+      t.context('When `onattrschanged` is undefined', () => {
+        t.beforeEach(() => {
+          mockComponent.onattrschanged = undefined;
+        });
+
+        t.it('Not raise error', () => {
+          let error = null;
+          try {
+            subject();
+          } catch (e) {
+            error = e;
+          }
+          t.expect(error).equals(null);
+        });
+      });
+    });
+
+    t.context('When not change params', () => {
+      t.beforeEach(() => {
+        mockComponent.vnode.attrs = {a: '1'};
+        mockComponent.vnode.state.component.attrs = {a: '1'};
+      });
+
+      t.it('Call onattrschanged', () => {
+        subject();
+        t.expect(mockComponent.onattrschanged.callCount).equals(0);
+      });
     });
   });
 });

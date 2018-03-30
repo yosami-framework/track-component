@@ -150,3 +150,15 @@ class HogeComponent extends TrackComponent {
   }
 }
 ```
+
+#### onattrschanged
+
+This is track-component lifecycle method.
+
+The `onattrschanged()` hooks is called after change component attributes.
+
+```javascript
+onattrschanged(newly, older) {
+  // call
+}
+```

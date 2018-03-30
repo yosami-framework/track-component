@@ -1,6 +1,6 @@
 {
   "name": "track-component",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Component for track.",
   "main": "lib/index.js",
   "repository": "alfa-jpn/track-component.git",
@@ -16,6 +16,7 @@
     "mithril": "^1.1.6",
     "track-config": "0.0.3",
     "track-dsl": "0.0.3",
+    "track-helpers": "0.0.3",
     "track-i18n": "0.0.2",
     "track-model": "0.0.5",
     "track-spec": "0.0.3"
@@ -23,6 +24,7 @@
   "peerDependencies": {
     "track-config": "0.0.x",
     "track-dsl": "0.0.x",
+    "track-helpers": "0.0.x",
     "track-i18n": "0.0.x",
     "track-model": "0.0.x"
   }

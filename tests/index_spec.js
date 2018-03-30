@@ -264,6 +264,7 @@ t.describe('TrackComponent', () => {
     const subject = (() => mockComponent._watchAttrs());
 
     t.beforeEach(() => {
+      mockComponent.oninit();
       mockComponent.onattrschanged = t.spy();
     });
 

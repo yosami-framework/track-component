@@ -1,9 +1,9 @@
 {
   "name": "track-component",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Component for track.",
   "main": "lib/index.js",
-  "repository": "alfa-jpn/track-component.git",
+  "repository": "yosami-framework/track-component.git",
   "scripts": {
     "linter": "eslint ./",
     "test": "ospec"

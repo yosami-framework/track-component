@@ -2,6 +2,8 @@
 Component for track.
 This component is based on the Component of Mithril.js.
 
+[![Build Status](https://travis-ci.org/yosami-framework/track-component.svg?branch=master)](https://travis-ci.org/yosami-framework/track-component)
+
 ## Installation
 
 ### npm

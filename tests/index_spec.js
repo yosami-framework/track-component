@@ -25,9 +25,7 @@ t.describe('TrackComponent', () => {
       /**
        * Scroll event handler.
        */
-      onScroll() {
-        //
-      }
+      onScroll() { }
     })(mockVnode);
   });
 

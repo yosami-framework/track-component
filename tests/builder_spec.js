@@ -1,18 +1,15 @@
 require('./spec_helper');
-const t       = require('track-spec');
-const Builder = require('../lib/builder.js');
+const t              = require('track-spec');
+const TrackComponent = require('../lib/index.js');
 
 t.describe('Builder', () => {
-  let mock               = null;
-  let mockViewClass      = null;
-  let mockViewModelClass = null;
+  let mock = null;
 
   t.beforeEach(() => {
     process.browser = true;
-
     global.addEventListener = t.spy(global.addEventListener);
 
-    mock = new (class HogeHoge {
+    mock = new (class extends TrackComponent {
       /**
        * Definitions of component.
        */
@@ -24,37 +21,10 @@ t.describe('Builder', () => {
       }
 
       /**
-       * Constructor
+       * Scroll event handler.
        */
-      constructor() {
-        this._viewNames = [];
-      }
-
-      /**
-       * Return type.
-       */
-      get type() {
-        return 'component';
-      }
-
-      /**
-       * Return mock class.
-       */
-      get mockViewClass() {
-        return mockViewClass;
-      }
-
-      /**
-       * Return mock class.
-       */
-      get mockViewModelClass() {
-        return mockViewModelClass;
-      }
+      onScroll() { }
     })();
-
-    mock._bindGlobalEvent = t.spy();
-
-    Builder.build(mock);
   });
 
   t.afterEach(() => {
@@ -76,10 +46,36 @@ t.describe('Builder', () => {
   });
 
   t.describe('#event', () => {
-    t.it('Call ._bindGlobalEvent', () => {
-      t.expect(mock._bindGlobalEvent.callCount).equals(1);
-      t.expect(mock._bindGlobalEvent.args[0]).equals('scroll');
-      t.expect(mock._bindGlobalEvent.args[1]).equals('onScroll');
+    t.it('Assign event', () => {
+      t.expect(global.addEventListener.callCount).equals(1);
+      t.expect(global.addEventListener.args[0]).equals('scroll');
+    });
+  });
+
+  t.describe('Inheritance', () => {
+    let inheritedMock = null;
+
+    t.beforeEach(() => {
+      inheritedMock = new (class extends mock.constructor {
+        /**
+         * Definitions of model.
+         */
+        static definer() {
+          name('inherited');
+          views('mock_c');
+        }
+      });
+    });
+
+    t.it('Set #_name', () => {
+      t.expect(inheritedMock._name).equals('inherited');
+    });
+
+    t.it('Evaluate ancestors dsl', () => {
+      t.expect(inheritedMock._viewNames.length).equals(3);
+      t.expect(inheritedMock._viewNames[0]).equals('mock_a');
+      t.expect(inheritedMock._viewNames[1]).equals('mock_b');
+      t.expect(inheritedMock._viewNames[2]).equals('mock_c');
     });
   });
 });

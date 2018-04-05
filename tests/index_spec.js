@@ -269,7 +269,7 @@ t.describe('TrackComponent', () => {
     t.context('When change params', () => {
       t.beforeEach(() => {
         mockComponent.vnode.attrs = {a: '1'};
-        mockComponent.vnode.state.component.attrs = {a: '0'};
+        mockComponent.vnode.state._attrs = {a: '0'};
       });
 
       t.it('Call onattrschanged', () => {
@@ -297,7 +297,7 @@ t.describe('TrackComponent', () => {
     t.context('When not change params', () => {
       t.beforeEach(() => {
         mockComponent.vnode.attrs = {a: '1'};
-        mockComponent.vnode.state.component.attrs = {a: '1'};
+        mockComponent.vnode.state._attrs = {a: '1'};
       });
 
       t.it('Call onattrschanged', () => {

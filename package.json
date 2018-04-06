@@ -1,6 +1,6 @@
 {
   "name": "track-component",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Component for track.",
   "main": "lib/index.js",
   "repository": "yosami-framework/track-component.git",

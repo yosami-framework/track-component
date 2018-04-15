@@ -1,5 +1,6 @@
 require('./spec_helper');
 const t              = require('track-spec');
+const TrackI18n      = require('track-i18n');
 const MockViewModel  = require('./fixtures/view_models/components/mock');
 const TrackComponent = require('../lib/index.js');
 
@@ -12,7 +13,7 @@ t.describe('TrackComponent', () => {
     global.addEventListener = t.spy(global.addEventListener);
     global.removeEventListener = t.spy(global.removeEventListener);
 
-    mockVnode = {state: {}, attrs: {}};
+    mockVnode = {state: {}, attrs: {pipe: {hoge: true}}};
     mockComponent = new (class extends TrackComponent {
       /**
        * Definitions of model.
@@ -41,11 +42,46 @@ t.describe('TrackComponent', () => {
     });
   });
 
+  t.describe('#i18n', () => {
+    const subject = (() => mockComponent.i18n);
+
+    t.it('Return i18n', () => {
+      t.expect(subject()).equals(TrackI18n);
+    });
+
+    t.context('When pipe has i18n', () => {
+      t.beforeEach(() => {
+        mockComponent.attrs.pipe.i18n = 'MockI18n';
+      });
+
+      t.it('Return i18n', () => {
+        t.expect(subject()).equals('MockI18n');
+      });
+    });
+  });
+
+  t.describe('#pipe', () => {
+    const subject = (() => mockComponent.pipe);
+
+    t.it('Return pipe', () => {
+      t.expect(subject()).equals(mockVnode.attrs.pipe);
+    });
+
+    t.context('When attrs does not have pipe', () => {
+      t.beforeEach(() => {
+        mockComponent.attrs.pipe = undefined;
+      });
+
+      t.it('Return pipe', () => {
+        t.expect(subject()).deepEquals({});
+      });
+    });
+  });
+
   t.describe('#type', () => {
     const subject = (() => mockComponent.type);
 
     t.it('Return type', () => {
-      subject();
       t.expect(subject()).equals('component');
     });
   });
@@ -64,6 +100,16 @@ t.describe('TrackComponent', () => {
 
     t.it('Return ViewModel', () => {
       t.expect(subject() instanceof MockViewModel).equals(true);
+    });
+
+    t.context('When pipe has i18n', () => {
+      t.beforeEach(() => {
+        mockComponent.pipe.i18n = 'MockI18n';
+      });
+
+      t.it('Pass i18n', () => {
+        t.expect(subject().__i18n).equals('MockI18n');
+      });
     });
   });
 
@@ -221,7 +267,8 @@ t.describe('TrackComponent', () => {
     });
 
     t.it('Render view', () => {
-      t.expect(subject()).deepEquals('mock');
+      t.expect(subject().tag).deepEquals('div');
+      t.expect(subject().text).deepEquals('mock');
     });
 
     t.it('Pipe data', () => {
@@ -245,6 +292,33 @@ t.describe('TrackComponent', () => {
 
       global.addEventListener.args[1]();
       t.expect(mockComponent.onHoge.callCount).equals(1);
+    });
+  });
+
+  t.describe('#_createElement', () => {
+    const subject = (() => mockComponent._createElement(tag));
+    let tag = null;
+
+    t.beforeEach(() => {
+      tag = {view: (() => 'mock')};
+    });
+
+    t.it('Return vnode', () => {
+      t.expect(subject().tag).equals(tag);
+    });
+
+    t.it('Set pipe', () => {
+      t.expect(subject().attrs.pipe).equals(mockVnode.attrs.pipe);
+    });
+
+    t.context('When tag is not component', () => {
+      t.beforeEach(() => {
+        tag = 'div';
+      });
+
+      t.it('Not set pipe', () => {
+        t.expect(subject().attrs).equals(undefined);
+      });
     });
   });
 

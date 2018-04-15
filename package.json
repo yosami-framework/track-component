@@ -1,6 +1,6 @@
 {
   "name": "track-component",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Component for track.",
   "main": "lib/index.js",
   "repository": "yosami-framework/track-component.git",
@@ -17,8 +17,8 @@
     "track-config": "0.0.3",
     "track-dsl": "0.0.8",
     "track-helpers": "0.0.5",
-    "track-i18n": "0.0.3",
-    "track-model": "0.0.5",
+    "track-i18n": "0.0.4",
+    "track-model": "0.0.7",
     "track-spec": "0.0.4"
   },
   "peerDependencies": {

@@ -12,7 +12,7 @@ t.describe('TrackComponent', () => {
     global.addEventListener = t.spy(global.addEventListener);
     global.removeEventListener = t.spy(global.removeEventListener);
 
-    mockVnode = {state: {}, attrs: {}};
+    mockVnode = {state: {}, attrs: {pipe: {}}};
     mockComponent = new (class extends TrackComponent {
       /**
        * Definitions of model.
@@ -221,7 +221,8 @@ t.describe('TrackComponent', () => {
     });
 
     t.it('Render view', () => {
-      t.expect(subject()).deepEquals('mock');
+      t.expect(subject().tag).deepEquals('div');
+      t.expect(subject().text).deepEquals('mock');
     });
 
     t.it('Pipe data', () => {
@@ -245,6 +246,33 @@ t.describe('TrackComponent', () => {
 
       global.addEventListener.args[1]();
       t.expect(mockComponent.onHoge.callCount).equals(1);
+    });
+  });
+
+  t.describe('#_createElement', () => {
+    const subject = (() => mockComponent._createElement(tag));
+    let tag = null;
+
+    t.beforeEach(() => {
+      tag = {view: (() => 'mock')};
+    });
+
+    t.it('Return vnode', () => {
+      t.expect(subject().tag).equals(tag);
+    });
+
+    t.it('Set pipe', () => {
+      t.expect(subject().attrs.pipe).equals(mockVnode.attrs.pipe);
+    });
+
+    t.context('When tag is not component', () => {
+      t.beforeEach(() => {
+        tag = 'div';
+      });
+
+      t.it('Not set pipe', () => {
+        t.expect(subject().attrs).equals(undefined);
+      });
     });
   });
 

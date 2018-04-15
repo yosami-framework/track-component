@@ -1,4 +1,4 @@
-module.exports = function(component, pipe, _yield) {
+module.exports = function($, component, pipe, _yield) {
   pipe.data = 'WATER!!!';
-  return 'mock-mock';
+  return $('div', 'mock-mock');
 };

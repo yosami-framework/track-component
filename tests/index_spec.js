@@ -296,28 +296,83 @@ t.describe('TrackComponent', () => {
   });
 
   t.describe('#_createElement', () => {
-    const subject = (() => mockComponent._createElement(tag));
-    let tag = null;
+    const subject = (() => mockComponent._createElement(selector, attributes));
+    let selector   = null;
+    let attributes = null;
 
     t.beforeEach(() => {
-      tag = {view: (() => 'mock')};
+      selector = {view: (() => 'mock')};
+      attributes = undefined;
     });
 
     t.it('Return vnode', () => {
-      t.expect(subject().tag).equals(tag);
+      t.expect(subject().tag).equals(selector);
     });
 
     t.it('Set pipe', () => {
       t.expect(subject().attrs.pipe).equals(mockVnode.attrs.pipe);
     });
 
-    t.context('When tag is not component', () => {
+    t.context('When selector is not component', () => {
       t.beforeEach(() => {
-        tag = 'div';
+        selector = 'div';
       });
 
       t.it('Not set pipe', () => {
         t.expect(subject().attrs).equals(undefined);
+      });
+    });
+
+    t.context('When selector is a', () => {
+      t.beforeEach(() => {
+        selector = 'a';
+        attributes = {
+          href: '/hogehoge',
+        };
+      });
+
+      t.it('Set oncreate', () => {
+        t.expect(typeof subject().attrs.oncreate).equals('function');
+      });
+
+      t.context('When select is not a', () => {
+        t.beforeEach(() => {
+          selector = 'div';
+        });
+
+        t.it('Not set oncreate', () => {
+          t.expect(typeof subject().attrs.oncreate).equals('undefined');
+        });
+      });
+
+      t.context('When href is not path', () => {
+        t.beforeEach(() => {
+          attributes.href = 'http://localhost:3000/hogehoge';
+        });
+
+        t.it('Not set oncreate', () => {
+          t.expect(typeof subject().attrs.oncreate).equals('undefined');
+        });
+      });
+
+      t.context('When attributes is undefined', () => {
+        t.beforeEach(() => {
+          attributes = undefined;
+        });
+
+        t.it('Not set oncreate', () => {
+          t.expect(typeof subject().attrs).equals('undefined');
+        });
+      });
+
+      t.context('When attributes has `data-disable-spa`', () => {
+        t.beforeEach(() => {
+          attributes['data-disable-spa'] = true;
+        });
+
+        t.it('Not set oncreate', () => {
+          t.expect(typeof subject().attrs.oncreate).equals('undefined');
+        });
       });
     });
   });
